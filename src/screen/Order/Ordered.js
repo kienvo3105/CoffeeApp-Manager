@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
 import OrderItem from '../../component/Order/OrderItem'
 import { useGet } from '../../api'
 import { useFocusEffect } from '@react-navigation/native'
+import { colors } from '../../constant/color'
 
 const Ordered = () => {
-    const { fetchGet, result, isError } = useGet();
+    const { fetchGet, result, isError, isLoading } = useGet();
     const [order, setOrder] = useState([]);
 
     const nextStep = async () => {
@@ -34,6 +35,23 @@ const Ordered = () => {
             setOrder(result.orders);
         }
     }, [result])
+
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size={'large'} color={colors.primary} />
+            </View>
+        )
+    }
+
+    if (order.length === 0) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text>Không có đơn hàng nào</Text>
+            </View>
+        )
+    }
 
     return (
         <FlatList
