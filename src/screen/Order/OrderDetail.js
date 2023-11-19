@@ -1,12 +1,29 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import BackBar from '../../component/Common/BackBar';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../../constant/color';
 import ProductOrderItem from '../../component/Order/ProductOrderItem';
 import { formatCurrency, formatTime, renderTitleButtonProcessOrder } from '../../utils/utils';
-const OrderDetail = ({ route }) => {
+import { usePatch } from '../../api';
+const OrderDetail = ({ route, navigation }) => {
+    const { fetchPatch, result, isError } = usePatch();
     const { item } = route.params;
+
+    const handleUpdateStatusOrder = async () => {
+        fetchPatch(`order/${item.id}`, { statusId: `t${parseInt(item.OrderStatus.id[1]) + 1}` });
+    }
+
+    const handleCancelOrder = () => {
+        fetchPatch(`order/${item.id}`, { statusId: `t5` });
+    }
+
+    useEffect(() => {
+        if (result && !isError) {
+            navigation.goBack();
+        }
+    }, [result])
+
     return (
         <View style={styles.container}>
             <BackBar title={item.OrderStatus.name} />
@@ -57,10 +74,13 @@ const OrderDetail = ({ route }) => {
 
                 <View style={[styles.frame, { flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }]}>
                     <TouchableOpacity
+                        onPress={handleCancelOrder}
                         style={{ borderWidth: 1, marginRight: 15, alignItems: 'center', borderColor: colors.darkGray, flex: 1, paddingVertical: 5 }}>
                         <Text style={{ fontSize: 15, color: colors.textExtra }}>Hủy đơn</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ borderWidth: 1, alignItems: 'center', borderColor: colors.primary, flex: 1, paddingVertical: 5 }}>
+                    <TouchableOpacity
+                        onPress={handleUpdateStatusOrder}
+                        style={{ borderWidth: 1, alignItems: 'center', borderColor: colors.primary, flex: 1, paddingVertical: 5 }}>
                         <Text style={{ fontSize: 15, color: colors.primary }}>{renderTitleButtonProcessOrder(item.OrderStatus.id)}</Text>
                     </TouchableOpacity>
                 </View>

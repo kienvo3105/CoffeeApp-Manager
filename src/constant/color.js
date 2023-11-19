@@ -12,7 +12,7 @@ export const colors = {
 
 export const colorStatus = {
     t1: "#b02732",
-    t2: "#FFFF33",
-    t3: "#FF6600",
-    t5: "#66FF00"
+    t2: "#c9a434",
+    t3: "#1f7810",
+    t5: "#4e2c21"
 }

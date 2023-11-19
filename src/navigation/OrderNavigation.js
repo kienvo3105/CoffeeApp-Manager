@@ -1,7 +1,7 @@
 import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import OrderAll from '../screen/Order/OrderAll';
+// import OrderAll from '../screen/Order/OrderAll';
 import OrderComplete from '../screen/Order/OrderComplete';
 import OrderProcessing from '../screen/Order/OrderProcessing';
 import OrderReceived from '../screen/Order/OrderReceived';
@@ -24,10 +24,10 @@ const OrderNavigation = () => {
                     borderRadius: 25,
                 },
             }}>
-            <Tab.Screen name="OrderAll" component={OrderAll}
+            {/* <Tab.Screen name="OrderAll" component={OrderAll}
                 options={{
                     tabBarLabel: "Tất cả"
-                }} />
+                }} /> */}
             <Tab.Screen name="Ordered" component={Ordered}
                 options={{
                     tabBarLabel: "Đơn mới"

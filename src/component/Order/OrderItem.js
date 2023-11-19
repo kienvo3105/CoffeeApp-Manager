@@ -1,13 +1,28 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { formatCurrency, formatTime, renderTitleButtonProcessOrder } from '../../utils/utils'
+import React, { useEffect } from 'react'
+import { formatCurrency, formatTime } from '../../utils/utils'
 import { colors, colorStatus } from '../../constant/color'
 import { useNavigation } from '@react-navigation/native'
-const OrderItem = ({ item, index }) => {
+
+import { usePatch } from '../../api'
+
+const OrderItem = ({ item, index, nextStep }) => {
+    const { fetchPatch, result, isError } = usePatch();
     const navigation = useNavigation();
     const handlePressDetailOrder = () => {
-        navigation.navigate("OrderDetail", { item })
+        navigation.navigate("OrderDetail", { item });
     }
+
+    const updateStatusOrder = async () => {
+        fetchPatch(`order/${item.id}`, { statusId: `t${parseInt(item.OrderStatus.id[1]) + 1}` });
+    }
+
+    useEffect(() => {
+        if (result && !isError) {
+            nextStep();
+        }
+    }, [result])
+
     return (
         <View style={styles.container}>
             <View style={styles.index}>
@@ -26,14 +41,28 @@ const OrderItem = ({ item, index }) => {
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                    <TouchableOpacity
-                        onPress={handlePressDetailOrder}
-                        style={{ borderWidth: 1, width: 80, marginRight: 15, alignItems: 'center', borderColor: colors.darkGray }}>
-                        <Text style={{ fontSize: 15, color: colors.textExtra }}>Xem thêm</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ borderWidth: 1, width: 80, alignItems: 'center', borderColor: colors.primary }}>
-                        <Text style={{ fontSize: 15, color: colors.primary }}>{renderTitleButtonProcessOrder(item.OrderStatus.id)}</Text>
-                    </TouchableOpacity>
+                    {
+                        item.OrderStatus.id === "t1" ?
+                            <>
+                                <TouchableOpacity
+                                    onPress={handlePressDetailOrder}
+                                    style={{ borderWidth: 1, width: 80, marginRight: 15, alignItems: 'center', borderColor: colors.darkGray }}>
+                                    <Text style={{ fontSize: 15, color: colors.textExtra }}>Xem thêm</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={updateStatusOrder}
+                                    style={{ borderWidth: 1, width: 80, alignItems: 'center', borderColor: colors.primary }}>
+                                    <Text style={{ fontSize: 15, color: colors.primary }}>Xác nhận</Text>
+                                </TouchableOpacity>
+                            </>
+                            :
+                            <TouchableOpacity
+                                onPress={handlePressDetailOrder}
+                                style={{ borderWidth: 1, paddingHorizontal: 10, justifyContent: 'center', alignItems: 'center', borderColor: colors.primary }}>
+                                <Text style={{ fontSize: 15, color: colors.primary }}>Xem chi tiết</Text>
+                            </TouchableOpacity>
+
+                    }
                 </View>
             </View>
         </View>
