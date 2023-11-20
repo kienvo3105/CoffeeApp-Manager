@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native'
-import React, { useState, useEffect } from 'react'
-
+import React, { useState, useEffect, useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext'
 import OrderItem from '../../component/Order/OrderItem'
 import { useGet } from '../../api'
 import { useFocusEffect } from '@react-navigation/native'
 import { colors } from '../../constant/color'
 
 const Ordered = () => {
+    const { state } = useContext(AuthContext);
+    const { manager } = state;
     const { fetchGet, result, isError, isLoading } = useGet();
     const [order, setOrder] = useState([]);
 
@@ -16,7 +18,7 @@ const Ordered = () => {
 
 
     const getOrder = async () => {
-        await fetchGet("order/branch/c371548a-cf0b-422f-add6-85956f296ecc?status=t1");
+        await fetchGet(`order/branch/${manager.Branch.id}?status=t1`);
     }
 
     useFocusEffect(

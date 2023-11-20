@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext';
 import { formatCurrency } from '../../utils/utils';
 import { useGet } from '../../api';
 import { colors } from '../../constant/color';
@@ -43,14 +44,16 @@ const color = [
 ]
 
 const Home = () => {
+    const { state } = useContext(AuthContext);
+    const { manager } = state;
     const { result, fetchGet, isError } = useGet();
     const { result: resultProduct, fetchGet: fetchGetProduct, isError: isErrorProduct } = useGet();
     const [revenue, setRevenue] = useState({ revenue: [], total: 0 });
     const [quantity, setQuantity] = useState({ product: [], totalQuantity: 0 });
     useEffect(() => {
         const getData = async () => {
-            fetchGet("revenue/revenue-month/branch/c371548a-cf0b-422f-add6-85956f296ecc");
-            fetchGetProduct("product/best-seller/branch/c371548a-cf0b-422f-add6-85956f296ecc")
+            fetchGet(`revenue/revenue-month/branch/${manager.Branch.id}`);
+            fetchGetProduct(`product/best-seller/branch/${manager.Branch.id}`);
         }
         getData();
     }, [])
