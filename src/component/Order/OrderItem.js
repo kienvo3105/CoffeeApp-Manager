@@ -33,7 +33,9 @@ const OrderItem = ({ item, index, nextStep }) => {
                     <View>
                         <Text style={{ fontSize: 18, fontWeight: 'bold', color: colors.textPrimary }}>{item.User.firstName} {item.User.lastName}</Text>
                         <Text style={{ fontSize: 15, color: colors.textExtra }}>{`${item.quantity} Item(s) | ${formatCurrency(item.finalPrice)}`}</Text>
-                        <Text style={{ fontSize: 15, color: colors.textExtra }}>{item.deliveryMethod === "mv" ? "Mang Về" : "Tại Chỗ"}{item.deliveryMethod !== "vc" && ` | Nhận lúc xxx`}</Text>
+                        {/* <Text style={{ fontSize: 15, color: colors.textExtra }}>{item.deliveryMethod === "mv" ? "Mang Về" : "Tại Chỗ"}{item.deliveryMethod !== "vc" && ` | Nhận lúc xxx`}</Text> */}
+                        <Text style={{ fontSize: 15, color: colors.textExtra }}>{item.deliveryMethod === "mv" ? "Mang Về" : "Tại Chỗ"}</Text>
+
                     </View>
                     <View style={{ alignItems: 'flex-end' }}>
                         <Text style={{ color: colors.textExtra, fontSize: 14 }}>{formatTime(item.orderDate)}</Text>
